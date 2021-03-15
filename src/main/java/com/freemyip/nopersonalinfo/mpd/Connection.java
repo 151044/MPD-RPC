@@ -40,7 +40,7 @@ public class Connection {
                     }
                 }
                 return ret;
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 e.printStackTrace();
                 failed = true;
                 return Map.of();

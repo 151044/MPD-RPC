@@ -7,7 +7,7 @@ arch=('any')
 license=('GPL')
 depends=('jdk11-openjdk')
 conflicts=('mpd-discord-rpc-git')
-source=("$pkgname::git+https://github.com/151044/Netty-Wolf.git")
+source=("$pkgname::git+https://github.com/151044/MPD-RPC.git")
 sha512sums=('SKIP')
 prepare() {
     cd $pkgname
@@ -16,10 +16,10 @@ prepare() {
 build() {
     cd $pkgname
     unset _JAVA_OPTIONS
-    cd Client/src/natives/
-    make linux
-    cd ../../../
     GRADLE_USER_HOME="$srcdir" ./gradlew compileJava jar clientJar
 }
 package() {
+    install -Dm644 $pkgname/build/libs/Client-0.1.0.jar "$pkgdir/opt/MPD-RPC/Client-0.1.0.jar"
+    echo "/usr/bin/java -jar '/opt/MPD-RPC/Client-0.1.0.jar' "\$@"" > mpd-rpc.sh
+    install -Dm755 mpd-rpc.sh "$pkgdir/usr/bin/mpd-rpc"
 }
