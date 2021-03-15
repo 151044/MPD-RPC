@@ -63,6 +63,7 @@ public class Connection {
                 failed = true;
             } else {
                 writer = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
+                failed = false;
             }
         }catch(IOException ioe){
             ioe.printStackTrace();
