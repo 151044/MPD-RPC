@@ -22,4 +22,5 @@ package() {
     install -Dm644 $pkgname/build/libs/Client-0.1.0.jar "$pkgdir/opt/MPD-RPC/Client-0.1.0.jar"
     echo "/usr/bin/java -jar '/opt/MPD-RPC/Client-0.1.0.jar' "\$@"" > mpd-rpc.sh
     install -Dm755 mpd-rpc.sh "$pkgdir/usr/bin/mpd-rpc"
+    install -Dm644 arch/mpd-discord-java.service /usr/lib/systemd/system/mpd-discord.service
 }

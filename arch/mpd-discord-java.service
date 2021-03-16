@@ -1,0 +1,5 @@
+[Unit]
+Description="Discord Rich Presence for Music Player Daemon, written in Java."
+
+[Service]
+ExecStart=/usr/bin/java -jar /opt/MPD-RPC/Client-0.1.0.jar
