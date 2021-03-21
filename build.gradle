@@ -15,6 +15,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     implementation 'com.github.Vatuu:discord-rpc:1.6.2'
+    implementation "com.github.hypfvieh:dbus-java:3.2.4"
 }
 task clientJar(type:Jar,dependsOn:assemble){
     //noinspection GrDeprecatedAPIUsage

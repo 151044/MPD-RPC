@@ -1,23 +1,28 @@
 package com.freemyip.nopersonalinfo.rpc;
 
+import com.freemyip.nopersonalinfo.dbus.Debug;
 import com.freemyip.nopersonalinfo.mpd.Command;
 import com.freemyip.nopersonalinfo.mpd.Connection;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
+import org.freedesktop.dbus.connections.impl.DBusConnection;
+import org.freedesktop.dbus.exceptions.DBusException;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
 
 public class Main {
-    public static void main(String[] args) throws InterruptedException, IOException, URISyntaxException {
+    private static Debug state = new Debug();
+    public static void main(String[] args) throws InterruptedException, DBusException {
         DiscordEventHandlers handlers = new DiscordEventHandlers();
         DiscordRPC.discordInitialize("750687646325407844",handlers,true);
         Connection conn = new Connection();
         Runtime.getRuntime().addShutdownHook(new Thread(DiscordRPC::discordShutdown));
+        DBusConnection dBusConn = DBusConnection.getConnection(DBusConnection.DBusBusType.SESSION);
+        dBusConn.requestBusName("com.nopersonlinfo.freemyip.rpc");
+        dBusConn.exportObject("/Debug",state);
         while(true) {
             if (!conn.failed()) {
                 Map<String, String> status = conn.runCommand(new Command("status"));
@@ -53,8 +58,12 @@ public class Main {
                 Thread.sleep(1000);
             }else{
                 conn.retry();
+                DiscordRPC.discordClearPresence();
                 Thread.sleep(10000);
             }
         }
+    }
+    public static boolean getDebugState(){
+        return state.isDebug();
     }
 }

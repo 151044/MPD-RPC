@@ -1,5 +1,7 @@
 package com.freemyip.nopersonalinfo.mpd;
 
+import com.freemyip.nopersonalinfo.rpc.Main;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
@@ -41,7 +43,9 @@ public class Connection {
                 }
                 return ret;
             } catch (IOException | NullPointerException e) {
-                e.printStackTrace();
+                if(Main.getDebugState()) {
+                    e.printStackTrace();
+                }
                 failed = true;
                 return Map.of();
             }
@@ -66,7 +70,9 @@ public class Connection {
                 failed = false;
             }
         }catch(IOException ioe){
-            ioe.printStackTrace();
+            if(Main.getDebugState()) {
+                ioe.printStackTrace();
+            }
             failed = true;
         }
         return failed;
