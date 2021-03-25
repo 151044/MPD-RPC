@@ -53,7 +53,7 @@ public class Main {
                     long currentTime = System.currentTimeMillis();
                     builder = builder.setEndTimestamp(currentTime + (totalTime - elapseTime) * 1000L);
                 }
-                DiscordRPC.discordUpdatePresence(builder.setDetails(song).setBigImage("music-logo", "Music Player Daemon").setSmallImage("arch-logo", "I use Arch BTW").build());
+                DiscordRPC.discordUpdatePresence(builder.setDetails(song).setBigImage("music-logo", "Music Player Daemon").setSmallImage(Distros.getDistroPath(), Distros.getDistroName()).build());
                 DiscordRPC.discordRunCallbacks();
                 Thread.sleep(1000);
             }else{
