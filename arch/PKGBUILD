@@ -1,5 +1,5 @@
 pkgname=('mpd-discord-rpc-java')
-pkgver='0.0.1.3'
+pkgver='0.0.1.4'
 pkgrel=1
 pkgdesc="Discord RPC for the Music Player Daemon."
 url="https://nopersonalinfo.freemyip.com"
