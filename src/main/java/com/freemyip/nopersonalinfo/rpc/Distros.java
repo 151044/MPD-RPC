@@ -35,7 +35,7 @@ public class Distros {
                 if(lsbRead.containsKey("PRETTY_NAME")){
                     distro = lsbRead.get("PRETTY_NAME").replace("\"","");
                     String lookup = distro.toLowerCase();
-                    findLogo.keySet().stream().filter(s -> lookup.contains(s)).findFirst().ifPresent(s -> distroPath = findLogo.get(s));
+                    findLogo.keySet().stream().filter(lookup::contains).findFirst().ifPresent(s -> distroPath = findLogo.get(s));
                     if(lsbRead.containsKey("BUILD_ID") && !lsbRead.get("BUILD_ID").equalsIgnoreCase("rolling")){
                         distro += " " + lsbRead.get("BUILD_ID");
                     }
@@ -67,6 +67,7 @@ public class Distros {
     }
     public static void setDistro(String name){
         distroName = name;
-        findLogo.keySet().stream().filter(s -> s.contains(name)).findFirst().ifPresent(s -> distroPath = findLogo.get(s));
+        String lookup = name.toLowerCase();
+        findLogo.keySet().stream().filter(lookup::contains).findFirst().ifPresent(s -> distroPath = findLogo.get(s));
     }
 }
