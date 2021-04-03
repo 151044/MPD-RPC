@@ -1,6 +1,7 @@
 package com.freemyip.nopersonalinfo.rpc;
 
 import com.freemyip.nopersonalinfo.dbus.Debug;
+import com.freemyip.nopersonalinfo.dbus.Settings;
 import com.freemyip.nopersonalinfo.mpd.Command;
 import com.freemyip.nopersonalinfo.mpd.Connection;
 import net.arikia.dev.drpc.DiscordEventHandlers;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 public class Main {
     private static Debug state = new Debug();
+    private static Settings settings = new Settings();
     public static void main(String[] args) throws InterruptedException, DBusException {
         DiscordEventHandlers handlers = new DiscordEventHandlers();
         DiscordRPC.discordInitialize("750687646325407844",handlers,true);
@@ -23,6 +25,7 @@ public class Main {
         DBusConnection dBusConn = DBusConnection.getConnection(DBusConnection.DBusBusType.SESSION);
         dBusConn.requestBusName("com.nopersonlinfo.freemyip.rpc");
         dBusConn.exportObject("/Debug",state);
+        dBusConn.exportObject("/Settings",settings);
         while(true) {
             if (!conn.failed()) {
                 Map<String, String> status = conn.runCommand(new Command("status"));
@@ -42,6 +45,10 @@ public class Main {
                         getSong = false;
                 }
                 String song = "No Song.";
+                if(!getSong && !settings.displayNoSong()){
+                    DiscordRPC.discordClearPresence();
+                    continue;
+                }
                 DiscordRichPresence.Builder builder = new DiscordRichPresence.Builder(state);
                 if (getSong) {
                     Map<String, String> response = conn.runCommand(new Command("currentsong"));
