@@ -47,21 +47,21 @@ public class Main {
                 String song = "No Song.";
                 if(!getSong && !settings.displayNoSong()){
                     DiscordRPC.discordClearPresence();
-                    continue;
+                }else {
+                    DiscordRichPresence.Builder builder = new DiscordRichPresence.Builder(state);
+                    if (getSong) {
+                        Map<String, String> response = conn.runCommand(new Command("currentsong"));
+                        song = response.getOrDefault("file", "unknown");
+                        List<String> songPath = List.of(song.split("/"));
+                        song = songPath.get(songPath.size() - 1);
+                        int elapseTime = Double.valueOf(status.getOrDefault("elapsed", "0.0")).intValue();
+                        int totalTime = Double.valueOf(response.getOrDefault("Time", "0.0")).intValue();
+                        long currentTime = System.currentTimeMillis();
+                        builder = builder.setEndTimestamp(currentTime + (totalTime - elapseTime) * 1000L);
+                    }
+                    DiscordRPC.discordUpdatePresence(builder.setDetails(song).setBigImage("music-logo", "Music Player Daemon").setSmallImage(Distros.getDistroPath(), Distros.getDistroName()).build());
+                    DiscordRPC.discordRunCallbacks();
                 }
-                DiscordRichPresence.Builder builder = new DiscordRichPresence.Builder(state);
-                if (getSong) {
-                    Map<String, String> response = conn.runCommand(new Command("currentsong"));
-                    song = response.getOrDefault("file", "unknown");
-                    List<String> songPath = List.of(song.split("/"));
-                    song = songPath.get(songPath.size() - 1);
-                    int elapseTime = Double.valueOf(status.getOrDefault("elapsed", "0.0")).intValue();
-                    int totalTime = Double.valueOf(response.getOrDefault("Time", "0.0")).intValue();
-                    long currentTime = System.currentTimeMillis();
-                    builder = builder.setEndTimestamp(currentTime + (totalTime - elapseTime) * 1000L);
-                }
-                DiscordRPC.discordUpdatePresence(builder.setDetails(song).setBigImage("music-logo", "Music Player Daemon").setSmallImage(Distros.getDistroPath(), Distros.getDistroName()).build());
-                DiscordRPC.discordRunCallbacks();
                 Thread.sleep(1000);
             }else{
                 conn.retry();
